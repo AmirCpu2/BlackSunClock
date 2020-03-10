@@ -798,8 +798,8 @@ bool bd=true;
 if(bd)
 {  
   //set My value process Clock
-  m = 10;//RTC.getMinutes();
-  h = 10;//RTC.getHours();
+  m = RTC.getMinutes();
+  h = RTC.getHours();
   bd = false;
 }
   //hours Check !(H>12)
