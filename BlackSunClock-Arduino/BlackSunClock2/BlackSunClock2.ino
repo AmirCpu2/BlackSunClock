@@ -4,9 +4,8 @@
 /***********************
  * AttachMethods Start
  **********************/
-int h=0 ,m=0 ,s=0;
+int h=10 ,m=10 ,s=0;
 int tp=0,tp2=0,tmp=0,one=0,d=0,temp1=0 ;
-int second=0,minute=5,hour=5;
 
 //# 1 1 2 3 5
 int led_sth [5] = {0,0,0,0,0};
@@ -20,6 +19,43 @@ int led_color[5] = {0,0,0,0,0};
 
 int fib [5]= {1,1,2,3,5};
 int fibmin [5]= {5,5,10,15,25};
+
+bool debug = true;
+bool gameMode = false;
+int lastActionTime[3] = {0,0,0};
+int limitActionTime = 2; // min
+
+void print(String message)
+{
+  if(debug)
+  {
+    Serial.print(message);
+  }
+}
+
+void print(int message)
+{
+  if(debug)
+  {
+    Serial.print(message);
+  }
+}
+
+void println(String message)
+{
+  if(debug)
+  {
+    Serial.println(message);
+  }
+}
+
+void println(int message)
+{
+  if(debug)
+  {
+    Serial.println(message);
+  }
+}
 
 void initilze ()
 {
@@ -415,176 +451,201 @@ char formatted[] = "00-00-00 00:00:00x";
   if(!Serial.available()) { return; }
   char command = Serial.read();
   int in,in2;
+  delay(100);
+  if( 'g' == command)//Get Status LED
+  {    
+    int number=SerialReadPosInt();
+    if(number > 0 && number < 6)
+    println(led_color[number-1]);
+  }
+  if(command == 'r')
+  {
+    String mm = "ledColor=[";
+    for(int i = 0 ; i < 5 ; i++)
+    {
+      mm += led_color[i];
+      mm += ",";
+    }
+    println(mm+"]");
+  }
+  if(command == 'l')
+  {
+    in = SerialReadPosInt();
+    gameMode = in == 0 ? false : true;
+  }
+  if(command == 't')
+  {
+    String tempString = "";
+    for(int i = 0 ; i < 5 ; i++)
+    {
+      print(led_color[i]);  
+    }
+    println("");
+  }
   switch(command)
   {
+  
     case 'H':
     case 'h':
-    in=SerialReadPosInt();
-    RTC.setHours(in);
-    RTC.setClock();
-    Serial.print("Setting hours to ");
-    Serial.println(in);
-    break;
+      in=SerialReadPosInt();
+      RTC.setHours(in);
+      RTC.setClock();
+      print("Setting hours to ");
+      println(in);
+      break;
+    
     case 'I':
     case 'i':
-    in=SerialReadPosInt();
-    RTC.setMinutes(in);
-    RTC.setClock();
-    Serial.print("Setting minutes to ");
-    Serial.println(in);
-    break;
+      in=SerialReadPosInt();
+      RTC.setMinutes(in);
+      RTC.setClock();
+      print("Setting minutes to ");
+      println(in);
+      break;
+    
     case 'S':
     case 's':
-    in=SerialReadPosInt();
-    RTC.setSeconds(in);
-    RTC.setClock();
-    Serial.print("Setting seconds to ");
-    Serial.println(in);
-    break;
+      in=SerialReadPosInt();
+      RTC.setSeconds(in);
+      RTC.setClock();
+      print("Setting seconds to ");
+      println(in);
+      break;
+    
     case 'Y':
     case 'y':
-    in=SerialReadPosInt();
-    RTC.setYear(in);
-    RTC.setClock();
-    Serial.print("Setting year to ");
-    Serial.println(in);
-    break;
+      in=SerialReadPosInt();
+      RTC.setYear(in);
+      RTC.setClock();
+      print("Setting year to ");
+      println(in);
+      break;
+    
     case 'M':
     case 'm':
-    in=SerialReadPosInt();
-    RTC.setMonth(in);
-    RTC.setClock();
-    Serial.print("Setting month to ");
-    Serial.println(in);
-    break;
+      in=SerialReadPosInt();
+      RTC.setMonth(in);
+      RTC.setClock();
+      print("Setting month to ");
+      println(in);
+      break;
+    
     case 'D':
     case 'd':
-    in=SerialReadPosInt();
-    RTC.setDate(in);
-    RTC.setClock();
-    Serial.print("Setting date to ");
-    Serial.println(in);
-    break;
+      in=SerialReadPosInt();
+      RTC.setDate(in);
+      RTC.setClock();
+      print("Setting date to ");
+      println(in);
+      break;
+    
     case 'W':
-    Serial.print("Day of week is ");
-    Serial.println((int) RTC.getDayOfWeek());
-    break;
+      print("Day of week is ");
+      println((int) RTC.getDayOfWeek());
+      break;
+    
     case 'w':
-    in=SerialReadPosInt();
-    RTC.setDayOfWeek(in);
-    RTC.setClock();
-    Serial.print("Setting day of week to ");
-    Serial.println(in);
-    break;
-    case 't':
-    case 'T':
-    if(RTC.is12hour()) {
-      RTC.switchTo24h();
-      Serial.println("Switching to 24-hour clock.");
-    } else {
-      RTC.switchTo12h();
-      Serial.println("Switching to 12-hour clock.");
-    }
-    RTC.setClock();
-    break;
+      in=SerialReadPosInt();
+      RTC.setDayOfWeek(in);
+      RTC.setClock();
+      print("Setting day of week to ");
+      println(in);
+      break;
     
     case 'A':
     case 'a':
-    if(RTC.is12hour()) {
-      RTC.setAM();
-      RTC.setClock();
-      Serial.println("Set AM.");
-    } else {
-      Serial.println("(Set hours only in 24-hour mode.)");
-    }
-    break;
+      if(RTC.is12hour()) {
+        RTC.setAM();
+        RTC.setClock();
+        println("Set AM.");
+      } else {
+        println("(Set hours only in 24-hour mode.)");
+      }
+      break;
     
     case 'P':
     case 'p':
-    if(RTC.is12hour()) {
-      RTC.setPM();
-      RTC.setClock();
-      Serial.println("Set PM.");
-    } else {
-      Serial.println("(Set hours only in 24-hour mode.)");
-    }
-    break;
+      if(RTC.is12hour()) {
+        RTC.setPM();
+        RTC.setClock();
+        println("Set PM.");
+      } else {
+        println("(Set hours only in 24-hour mode.)");
+      }
+      break;
 
     case 'q':
-    RTC.sqwEnable(RTC.SQW_1Hz);
-    Serial.println("Square wave output set to 1Hz");
-    break;
+      RTC.sqwEnable(RTC.SQW_1Hz);
+      println("Square wave output set to 1Hz");
+      break;
+    
     case 'Q':
-    RTC.sqwDisable(0);
-    Serial.println("Square wave output disabled (low)");
-    break;
+      RTC.sqwDisable(0);
+      println("Square wave output disabled (low)");
+      break;
     
     case 'z':
-    RTC.start();
-    Serial.println("Clock oscillator started.");
+      RTC.start();
+      println("Clock oscillator started.");
     break;
+    
     case 'Z':
-    RTC.start(); //:) Dont shodown Clock , you mast change start to stop for use fiture
-    Serial.println("Clock oscillator stopped.");
-    break;
+      RTC.start(); //:) Dont shodown Clock , you mast change start to stop for use fiture
+      println("Clock oscillator stopped.");
+      break;
     
     case '>':
-    in=SerialReadPosInt();
-    in2=SerialReadPosInt();
-    RTC.writeData(in, in2);
-    Serial.print("Write to register ");
-    Serial.print(in);
-    Serial.print(" the value ");
-    Serial.println(in2);
-    break;
+      in=SerialReadPosInt();
+      in2=SerialReadPosInt();
+      RTC.writeData(in, in2);
+      print("Write to register ");
+      print(in);
+      print(" the value ");
+      println(in2);
+      break;
         
     case '<':
-    in=SerialReadPosInt();
-    in2=RTC.readData(in);
-    Serial.print("Read from register ");
-    Serial.print(in);
-    Serial.print(" the value ");
-    Serial.println(in2);
-    break;
-
-    case "LED1" :
-    Serial.println(led_color[0]);
-    break;
-
-    case "LED1.2" :
-    Serial.println(led_color[1]);
-    break;
-
-    case "LED2" :
-    Serial.println(led_color[2]);
-    break;
-
-    case "LED3" :
-    Serial.println(led_color[3]);
-    break;
-
-    case "LED5" :
-    Serial.println(led_color[4]);
-    break;
-    
+      in=SerialReadPosInt();
+      in2=RTC.readData(in);
+      print("Read from register ");
+      print(in);
+      print(" the value ");
+      println(in2);
+      break;
+      
+    case 'b':
+      delay(100);
+      int temp = SerialReadPosInt();
+      int select = temp/10;
+      int color = temp%10;
+      led_color[select-1] = color;
+      println("LED:"+(String)select+" Set Color :"+(String)color);
+      //Game Mode Set
+      gameMode = true;
+      lastActionTime[0] = h;
+      lastActionTime[1] = m;
+      lastActionTime[2] = s;
+      break;
+       
     default:
-    Serial.println("Unknown command. Try these:");
-    Serial.println(" h## - set Hours [range 1..12 or 0..24]");
-    Serial.println(" i## - set mInutes [range 0..59]");
-    Serial.println(" s## - set Seconds [range 0..59]");
-    Serial.println(" d## - set Date [range 1..31]");
-    Serial.println(" m## - set Month [range 1..12]");
-    Serial.println(" y## - set Year [range 0..99]");
-    Serial.println(" w## - set arbitrary day of Week [range 1..7]");
-    Serial.println(" t   - toggle 24-hour mode");
-    Serial.println(" LED# - get Color LED [range 1,1.2,2..5]");
-    Serial.println(" a   - set AM          p   - set PM");
-    Serial.println();
-    Serial.println(" z   - start clock     Z   - stop clock");
-    Serial.println(" q   - SQW/OUT = 1Hz   Q   - stop SQW/OUT");
-    Serial.println();
-    Serial.println(" >##,###  - write to register ## the value ###");
-    Serial.println(" <##      - read the value in register ##");
+      println("Unknown command. Try these:");
+      println(" h## - set Hours [range 1..12 or 0..24]");
+      println(" i## - set mInutes [range 0..59]");
+      println(" s## - set Seconds [range 0..59]");
+      println(" d## - set Date [range 1..31]");
+      println(" m## - set Month [range 1..12]");
+      println(" y## - set Year [range 0..99]");
+      println(" w## - set arbitrary day of Week [range 1..7]");
+      println(" t   - Get Status All LED =>00000 ");
+      println(" g(LEDGet)# - get Color LED [range 1,2,3,4,5]");
+      println(" b(LEDSet)## - set Color LED [range LED 1,2/*--1.2--*/,3/*--2--*/,4/*--3--*/,5][range color 0,1 ]");
+      println(" l   -Set Game Mode Status");
+      println(" r   -Print Led Status");
+      println(" a   - set AM          p   - set PM");
+      println(" z   - start clock     Z   - stop clock");
+      println(" q   - SQW/OUT = 1Hz   Q   - stop SQW/OUT");
+      println(" >##,###  - write to register ## the value ###");
+      println(" <##      - read the value in register ##");
     
   }//switch on command
   
@@ -623,6 +684,7 @@ void setup()
 
   //Wire.begin();
   Serial.begin(115200);
+  h=10;m=10;s=0;
 }
 
 void loop() 
@@ -640,11 +702,11 @@ void loop()
   count++;
 
   //send serial DateTime
-  if(count % Display_Clock_Every_N_Seconds == 0){
-    Serial.print("=>");
+  if(count % Display_Clock_Every_N_Seconds == 0 && false){
+    print("=>");
     RTC.getFormatted(formatted);
-    Serial.print(formatted);
-    Serial.println();
+    print(formatted);
+    println("");
   }
 
    /******************************************
@@ -656,33 +718,33 @@ void loop()
   switch(count/10 % 6)
   {
     case 0:
-    Serial.print("Squarewave disabled (low impedance): ");
+    print("Squarewave disabled (low impedance): ");
     RTC.sqwDisable(0);
-    Serial.println((int) RTC.readData(7));
+    println((int) RTC.readData(7));
     break;
     case 1:
-    Serial.print("Squarewave disabled (high impedance): ");
+    print("Squarewave disabled (high impedance): ");
     RTC.sqwDisable(1);
-    Serial.println((int) RTC.readData(7));
+    println((int) RTC.readData(7));
     break;
     case 2:
-    Serial.println("Squarewave enabled at 1 Hz");
+    println("Squarewave enabled at 1 Hz");
     RTC.sqwEnable(RTC.SQW_1Hz);
     break;
     case 3:
-    Serial.println("Squarewave enabled at 4.096 kHz");
+    println("Squarewave enabled at 4.096 kHz");
     RTC.sqwEnable(RTC.SQW_4kHz);
     break;
     case 4:
-    Serial.println("Squarewave enabled at 8.192 kHz");
+    println("Squarewave enabled at 8.192 kHz");
     RTC.sqwEnable(RTC.SQW_8kHz);
     break;
     case 5:
-    Serial.println("Squarewave enabled at 32.768 kHz");
+    println("Squarewave enabled at 32.768 kHz");
     RTC.sqwEnable(RTC.SQW_32kHz);
     break;
     default:
-    Serial.println("Squarewave test not defined");
+    println("Squarewave test not defined");
   }//switch
   }
   #endif
@@ -694,7 +756,7 @@ void loop()
   {
     if(RTC.getSeconds() < 45) 
     {
-      Serial.println("Stopping clock for 10 seconds");
+      println("Stopping clock for 10 seconds");
       //RTC.stop();
     }
     //if we have enough time
@@ -702,7 +764,7 @@ void loop()
   else {
     RTC.setSeconds(RTC.getSeconds()+11);
     RTC.start();
-    Serial.println("Adding 11 seconds and restarting clock");
+    println("Adding 11 seconds and restarting clock");
   }
   }//if on a multiple of 10 counts
   #endif
@@ -712,13 +774,13 @@ void loop()
   {
     if(count %20 == 0)
     {
-      Serial.println("switching to 12-hour time");
+      println("switching to 12-hour time");
       RTC.switchTo12h();
       RTC.setClock();
     }
     else
     {
-      Serial.println("switching to 24-hour time");
+      println("switching to 24-hour time");
       RTC.switchTo24h();
       RTC.setClock();
     }
@@ -732,11 +794,14 @@ void loop()
   /******************************************
    * Start BlackSun Clock process
    ******************************************/
-  
+bool bd=true;
+if(bd)
+{  
   //set My value process Clock
-  m = RTC.getMinutes();
-  h = RTC.getHours();
-  
+  m = 10;//RTC.getMinutes();
+  h = 10;//RTC.getHours();
+  bd = false;
+}
   //hours Check !(H>12)
   if(h>=13)
   {
@@ -766,27 +831,34 @@ void loop()
   //1-9 , 10-59 
   one = m%10;
   
-  // 0 > one > 5
-  if( 1 <= one && one <= 4 )
+  if(!gameMode)
   {
-    tmp = m/10 ;
-    tmp *= 10;
-    tmp += 5;
-    
-    clk(tmp ,h);
-  }
-  else if( 6 <= one && one <= 9)
-  {
-    tmp = m/10 ;
-    tmp += 1;
-    tmp *= 10;
-    tmp += 0;
-    
-    clk(tmp ,h);
-  }
-  else
-  {
-    clk(m ,h);
+  
+    // 0 > one > 5
+    if( 1 <= one && one <= 4 )
+    {
+      tmp = m/10 ;
+      tmp *= 10;
+      tmp += 5;
+      
+      clk(tmp ,h);
+    }
+    else if( 6 <= one && one <= 9)
+    {
+      tmp = m/10 ;
+      tmp += 1;
+      tmp *= 10;
+      tmp += 0;
+      
+      clk(tmp ,h);
+    }
+    else
+    {
+      clk(m ,h);
+    }
+
+    print("gameMode=>");
+    println((gameMode?"true":"false"));
   }
 
   //Counter Set Color & Turn off& on mode LED
@@ -800,6 +872,14 @@ void loop()
       {
         set_color(d+1,0);
       }
+  }
+  println("lastActionTime+limit: "+(lastActionTime[0]*60) + lastActionTime[1] + limitActionTime);
+  println("TimeNow"+(h*60) + m);
+  //Check Game Mode
+  if(gameMode && (lastActionTime[0]*60) + lastActionTime[1] + limitActionTime <= (h*60) + m)
+  {
+    //Gamode Is Off
+    gameMode = false;
   }
   
   /******************************************
