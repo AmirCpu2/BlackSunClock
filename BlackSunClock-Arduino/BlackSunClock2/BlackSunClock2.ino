@@ -20,7 +20,7 @@ int led_color[5] = {0,0,0,0,0};
 int fib [5]= {1,1,2,3,5};
 int fibmin [5]= {5,5,10,15,25};
 
-bool debug = true;
+bool debug = false;
 bool gameMode = false;
 int lastActionTime[3] = {0,0,0};
 int limitActionTime = 2; // min
@@ -456,7 +456,7 @@ char formatted[] = "00-00-00 00:00:00x";
   {    
     int number=SerialReadPosInt();
     if(number > 0 && number < 6)
-    println(led_color[number-1]);
+      Serial.println(led_color[number-1]);
   }
   if(command == 'r')
   {
@@ -466,7 +466,7 @@ char formatted[] = "00-00-00 00:00:00x";
       mm += led_color[i];
       mm += ",";
     }
-    println(mm+"]");
+    Serial.println(mm+"]");
   }
   if(command == 'l')
   {
@@ -475,12 +475,11 @@ char formatted[] = "00-00-00 00:00:00x";
   }
   if(command == 't')
   {
-    String tempString = "";
     for(int i = 0 ; i < 5 ; i++)
     {
-      print(led_color[i]);  
+      Serial.print(led_color[i]);  
     }
-    println("");
+    Serial.println("");
   }
   switch(command)
   {
@@ -541,7 +540,7 @@ char formatted[] = "00-00-00 00:00:00x";
     
     case 'W':
       print("Day of week is ");
-      println((int) RTC.getDayOfWeek());
+      Serial.println((int) RTC.getDayOfWeek());
       break;
     
     case 'w':
@@ -576,7 +575,7 @@ char formatted[] = "00-00-00 00:00:00x";
 
     case 'q':
       RTC.sqwEnable(RTC.SQW_1Hz);
-      println("Square wave output set to 1Hz");
+      Serial.println("Square wave output set to 1Hz");
       break;
     
     case 'Q':
@@ -702,7 +701,7 @@ void loop()
   count++;
 
   //send serial DateTime
-  if(count % Display_Clock_Every_N_Seconds == 0 && false){
+  if(count % Display_Clock_Every_N_Seconds == 0 && debug){
     print("=>");
     RTC.getFormatted(formatted);
     print(formatted);
@@ -715,37 +714,37 @@ void loop()
   #ifdef TEST_Squarewave
   if(count%10 == 0)
   {
-  switch(count/10 % 6)
-  {
-    case 0:
-    print("Squarewave disabled (low impedance): ");
-    RTC.sqwDisable(0);
-    println((int) RTC.readData(7));
-    break;
-    case 1:
-    print("Squarewave disabled (high impedance): ");
-    RTC.sqwDisable(1);
-    println((int) RTC.readData(7));
-    break;
-    case 2:
-    println("Squarewave enabled at 1 Hz");
-    RTC.sqwEnable(RTC.SQW_1Hz);
-    break;
-    case 3:
-    println("Squarewave enabled at 4.096 kHz");
-    RTC.sqwEnable(RTC.SQW_4kHz);
-    break;
-    case 4:
-    println("Squarewave enabled at 8.192 kHz");
-    RTC.sqwEnable(RTC.SQW_8kHz);
-    break;
-    case 5:
-    println("Squarewave enabled at 32.768 kHz");
-    RTC.sqwEnable(RTC.SQW_32kHz);
-    break;
-    default:
-    println("Squarewave test not defined");
-  }//switch
+    switch(count/10 % 6)
+    {
+      case 0:
+      print("Squarewave disabled (low impedance): ");
+      RTC.sqwDisable(0);
+      println((int) RTC.readData(7));
+      break;
+      case 1:
+      print("Squarewave disabled (high impedance): ");
+      RTC.sqwDisable(1);
+      println((int) RTC.readData(7));
+      break;
+      case 2:
+      println("Squarewave enabled at 1 Hz");
+      RTC.sqwEnable(RTC.SQW_1Hz);
+      break;
+      case 3:
+      println("Squarewave enabled at 4.096 kHz");
+      RTC.sqwEnable(RTC.SQW_4kHz);
+      break;
+      case 4:
+      println("Squarewave enabled at 8.192 kHz");
+      RTC.sqwEnable(RTC.SQW_8kHz);
+      break;
+      case 5:
+      println("Squarewave enabled at 32.768 kHz");
+      RTC.sqwEnable(RTC.SQW_32kHz);
+      break;
+      default:
+      println("Squarewave test not defined");
+    }//switch
   }
   #endif
   
@@ -794,14 +793,14 @@ void loop()
   /******************************************
    * Start BlackSun Clock process
    ******************************************/
-bool bd=true;
-if(bd)
-{  
-  //set My value process Clock
-  m = RTC.getMinutes();
-  h = RTC.getHours();
-  bd = false;
-}
+  bool bd=true;
+  if(bd)
+  {  
+    //set My value process Clock
+    m = RTC.getMinutes();
+    h = RTC.getHours();
+    bd = false;
+  }
   //hours Check !(H>12)
   if(h>=13)
   {
@@ -864,7 +863,7 @@ if(bd)
   //Counter Set Color & Turn off& on mode LED
   for (d=0 ; d<5 ; d++)
   {   
-      if (led_result[d]==1) 
+      if (led_result[d]==1||gameMode) 
       {
         set_color(d+1,led_color[d]);
       }
@@ -873,9 +872,11 @@ if(bd)
         set_color(d+1,0);
       }
   }
+  
   println("lastActionTime+limit: "+(lastActionTime[0]*60) + lastActionTime[1] + limitActionTime);
   println("TimeNow"+(h*60) + m);
-  //Check Game Mode
+  
+      //Check Game Mode
   if(gameMode && (lastActionTime[0]*60) + lastActionTime[1] + limitActionTime <= (h*60) + m)
   {
     //Gamode Is Off

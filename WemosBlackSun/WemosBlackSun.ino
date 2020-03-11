@@ -5,12 +5,18 @@
  * Begin Init Value
  *******************/
 //  WiFi Config
-const char* ssid = "amircpuPhone";    
+const char* ssid = "BlackSunClock";    
 const char* password = "P@ssM0rd";
 int port = 8000;
 
 //  WeMos ESP8266 pins= D0,D1,D2,D3,D4,D5,D6,D7,D8
 int d0=16, d1=5, d2=4, d3=0, d4=2, d5=14, d6=12, d7=13, d8=15;
+
+//Virtual Temp Memory
+String vPin[] = {"L1","L1.2","L2","L3","L5","LSun","LMan","GameMode","Hour","Minute","Second"};
+String tPin[] = {"Command","Response"};
+int vTempMamoryPin[] = {0,0,0,0,0,0,0,0,0,0,0};
+String tTempMamoryPin[] = {"",""};
 
 //  Example variables
 int MaxVDPin=8;
@@ -24,8 +30,6 @@ int Led1_2 = 0;
 int Led2 = 0;
 int Led3 = 0;
 int Led5 = 0;
-int LedOut = 0;
-int CounterMan = 0;
 
 //  Setup GPIO
 /*----Sun LED----*/
@@ -206,6 +210,58 @@ void ChangeColor(int led,int color,int light)
   }
 }
 
+//read in numeric characters until something else
+//or no more data is available on serial.
+int SerialReadPosInt() {
+  int i = 0;
+  boolean done=false;
+  while(Serial.available() && !done)
+  {
+    char c = Serial.read();
+    if (c >= '0' && c <='9')
+    {
+      i = i * 10 + (c-'0');
+    }
+    else 
+    {
+      done = true;
+    }
+  }
+  return i;
+}
+
+void GetLedValue()
+{
+  //send command
+  Serial.println("t");
+
+  //Check Avalibale Response
+  if(!Serial.available()) { return; }
+  delay(100);
+
+  //Get Response
+  int ledColors = SerialReadPosInt();
+
+  //pars Response
+  Led1 = ledColors%10;
+  virtuino.vMemoryWrite(0,ledColors%10);
+  ledColors /= 10;
+  
+  Led1_2 = ledColors%10;
+  virtuino.vMemoryWrite(1,ledColors%10);
+  ledColors /= 10;
+  
+  Led2 = ledColors%10;
+  virtuino.vMemoryWrite(2,ledColors%10);
+  ledColors /= 10;
+  
+  Led3 = ledColors%10;
+  virtuino.vMemoryWrite(3,ledColors%10);
+  ledColors /= 10;
+  
+  Led5 = ledColors%10;
+  virtuino.vMemoryWrite(4,ledColors%10);
+}
 /********************
  * End Function
  ********************/
@@ -213,11 +269,11 @@ void ChangeColor(int led,int color,int light)
 
 void setup() {
   //----- Virtuino settings
-  virtuino.DEBUG=true;                         // set this value TRUE to enable the serial monitor status
+  virtuino.DEBUG=false;                        // set this value TRUE to enable the serial monitor status
   virtuino.password="1234";                    // Set a password to your web server for more protection 
                                                // avoid special characters like ! $ = @ # % & * on your password. Use only numbers or text characters
 
-  Serial.begin(115200);                          // set this value equals Arduino Serial Value
+  Serial.begin(115200);                        // set this value equals Arduino Serial Value
   delay(10);
   
   //----  1. Settings as Station - Connect to a WiFi network
@@ -257,13 +313,9 @@ void setup() {
   pinMode(d3, OUTPUT);//R = > Man LED
   pinMode(d4, OUTPUT);//W = > Sun LED
 
+  //Get Clock Led Values
+  GetLedValue();
 }
-
-//Virtual Temp Memory
-String vPin[] = {"L1","L1.2","L2","L3","L5","LSun","LMan","GameMode","Hour","Minute","Second"};
-String tPin[] = {"Command","Response"};
-int vTempMamoryPin[] = {0,0,0,0,0,0,0,0,0,0,0};
-String tTempMamoryPin[] = {"",""};
 
 void loop() {
 //  Yes LetsGOOO ^__*
@@ -273,7 +325,8 @@ void loop() {
   {
     // Read virtual memory 0 to n from Virtuino app
     int v = virtuino.vMemoryRead(i);
-    Serial.println("v"+String(v));
+    //Serial.println("v:"+String(v));
+    
     //Check Last vs new status
     if(vTempMamoryPin[i] != v)
     {
@@ -293,7 +346,13 @@ void loop() {
       if(vPin[i] == "LMan")
         ChangeColor(0,v,1);//Color 0 == black And 1 == Read And 2 == Green And 3 == Blue And 4 == Red+Green And 5 == Red+Blue And 6 == Green+Blue And 7 == Red+Green+blue(White)
       if(vPin[i] == "GameMode")
+      {
         Serial.println("l"+String(v));// 0 off,1 on
+        delay(100);
+        
+        //Get Clock Led Values
+        GetLedValue();
+      }
       if(vPin[i] == "Hour")
       {
         timeTemp = v < 10 ? "0" + String(v) : String(v) ;
@@ -307,7 +366,7 @@ void loop() {
       if(vPin[i] == "Second")
       {
         timeTemp = v < 10 ? "0" + String(v) : String(v) ;
-        Serial.println("i"+timeTemp);// [range 0..59]
+        Serial.println("s"+timeTemp);// [range 0..59]
       }
       //Set Last status
       vTempMamoryPin[i] = v;
