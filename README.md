@@ -30,7 +30,7 @@ This board can execute the following commands via serial:
 >16. \> ##, ### - write to register ## the value ###
 >17. < ## - read the value in register ##
 
-******You can put # the above quotes instead.*******
+******You can put # the above quotes instead.******
 
 The next board is responsible for controlling the wireless connection between the sun and the LED, and the middle of the hour is controlled by the first version via the web and the second by the mobile application, which has the responsibility of maintaining and reporting the first board.
 
