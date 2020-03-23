@@ -53,4 +53,12 @@ The next board is responsible for controlling the wireless connection between th
 * Schottky diode 10A07
 * Resistors 10K
 
-# Section 3:
+# How does this watch go home?
+The count is based on the Fibonacci sequence as the first five sentences of this sequence are used to represent sentences from 1 to 12, using LEDs and color schemes as follows:
+- Required Sequence {1,1,2,3,5}
+- Total Color {Black,Red,Green,Blue}
+- Black in order of 0 or non.
+- Red means minutes worth five times that unit.
+- Green indicates the meaning of a watch worth its time.
+- Blue means minutes and hours with listed values.
+For example, if unit 1 is green, it is 1 hour, if it is red, it is 5 minutes, if it is blue, it is 1 hours and 5 minutes.
