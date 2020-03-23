@@ -43,6 +43,8 @@ The next board is responsible for controlling the wireless connection between th
 * Schottky diode 10A07
 * CRYSTAL 32.678kHz
 * Resistors 10K
+* Regulatory 8705
+* capacitor 25v 3300uf
 * LED Green
 
 \- In the next board:
@@ -50,3 +52,5 @@ The next board is responsible for controlling the wireless connection between th
 * ULN 2803
 * Schottky diode 10A07
 * Resistors 10K
+
+# Section 3:
