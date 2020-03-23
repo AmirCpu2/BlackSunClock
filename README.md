@@ -12,7 +12,7 @@ Photos of the body:
 # Section 2:
 There are two main boards in this clock, the first for clock control and the instructions for clock control and control of the main LEDs of the clock.
 This board can execute the following commands via serial:
-1. h ## - Set Hours [range 1..12 or 0..24]
+<1. h ## - Set Hours [range 1..12 or 0..24]
 2. i ## - set Minutes [range 0..59]
 3. s ## - set Seconds [range 0..59]
 4. d ## - set Date [range 1.31]
@@ -28,7 +28,7 @@ This board can execute the following commands via serial:
 14. z - start clock Z - stop clock
 15. q - SQW / OUT = 1Hz Q - stop SQW / OUT
 16. > ##, ### - write to register ## the value ###
-17. <## - read the value in register ##
+17. < ## - read the value in register ##>
 
 ******You can put # the above quotes instead.*******
 
