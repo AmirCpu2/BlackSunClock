@@ -12,25 +12,25 @@ Photos of the body:
 # Section 2:
 There are two main boards in this clock, the first for clock control and the instructions for clock control and control of the main LEDs of the clock.
 This board can execute the following commands via serial:
-h ## - Set Hours [range 1..12 or 0..24]
-i ## - set Minutes [range 0..59]
-s ## - set Seconds [range 0..59]
-d ## - set Date [range 1.31]
-m ## - set Month [range 1..12]
-y ## - set Year [range 0..99]
-w ## - arbitrary day of the week [range 1..7]
-t - Get Status All LED => 00000
-g (LEDGet) # - get Color LED [range 1,2,3,4,5]
-b (LEDSet) ## - set Color LED [range LED 1,2 / * - 1.2 - * /, 3 / * - 2 - * /, 4 / * - 3 - * /, 5] [range color 0,1,2,3]
-l - Set Game Mode Status [range 0, 1]
-r - Print Led Status
-a - set AM p - set PM
-z - start clock Z - stop clock
-q - SQW / OUT = 1Hz Q - stop SQW / OUT
-> ##, ### - write to register ## the value ###
-<## - read the value in register ##
+1. h ## - Set Hours [range 1..12 or 0..24]
+2. i ## - set Minutes [range 0..59]
+3. s ## - set Seconds [range 0..59]
+4. d ## - set Date [range 1.31]
+5. m ## - set Month [range 1..12]
+6. y ## - set Year [range 0..99]
+7. w ## - arbitrary day of the week [range 1..7]
+8. t - Get Status All LED => 00000
+9. g (LEDGet) # - get Color LED [range 1,2,3,4,5]
+10. b (LEDSet) ## - set Color LED [range LED 1,2 / * - 1.2 - * /, 3 / * - 2 - * /, 4 / * - 3 - * /, 5] [range color 0,1,2,3]
+11. l - Set Game Mode Status [range 0, 1]
+12. r - Print Led Status
+13. a - set AM p - set PM
+14. z - start clock Z - stop clock
+15. q - SQW / OUT = 1Hz Q - stop SQW / OUT
+16. > ##, ### - write to register ## the value ###
+17. <## - read the value in register ##
 
-You can put # the above quotes instead.
+******You can put # the above quotes instead.*******
 
 The next board is responsible for controlling the wireless connection between the sun and the LED, and the middle of the hour is controlled by the first version via the web and the second by the mobile application, which has the responsibility of maintaining and reporting the first board.
 
