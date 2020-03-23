@@ -35,7 +35,7 @@ This board can execute the following commands via serial:
 The next board is responsible for controlling the wireless connection between the sun and the LED, and the middle of the hour is controlled by the first version via the web and the second by the mobile application, which has the responsibility of maintaining and reporting the first board.
 
 # What pieces are used in each board?
-- In the first board:
+\- In the first board:
 * Arduino pro mini Or ATMEGA 8
 * DS 1307
 * ULN 2003
@@ -45,7 +45,7 @@ The next board is responsible for controlling the wireless connection between th
 * Resistors 10K
 * LED Green
 
-- In the next board:
+\- In the next board:
 * Wemos D1 Or ESP 8266 v.12
 * ULN 2803
 * Schottky diode 10A07
