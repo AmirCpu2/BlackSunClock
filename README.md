@@ -64,4 +64,4 @@ The count is based on the Fibonacci sequence as the first five sentences of this
 - Red means minutes worth five times that unit.
 - Green indicates the meaning of a watch worth its time.
 - Blue means minutes and hours with listed values.
-%For example, if unit 1 is green, it is 1 hour, if it is red, it is 5 minutes, if it is blue, it is 1 hours and 5 minutes.%
+<h1>For example, if unit 1 is green, it is 1 hour, if it is red, it is 5 minutes, if it is blue, it is 1 hours and 5 minutes.</h1>
