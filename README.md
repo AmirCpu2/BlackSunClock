@@ -28,9 +28,10 @@ This board can execute the following commands via serial:
 >14. p - set PM
 >15. z - start clock 
 >16. Z - stop clock
->17. q - SQW / OUT = 1Hz Q - stop SQW / OUT
->18. \> ##, ### - write to register ## the value ###
->19. < ## - read the value in register ##
+>17. q - SQW / OUT = 1Hz 
+>18. Q - stop SQW / OUT
+>19. \> ##, ### - write to register ## the value ###
+>20. < ## - read the value in register ##
 
 ******You can put # the above quotes instead.******
 
