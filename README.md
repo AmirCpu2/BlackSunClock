@@ -56,7 +56,7 @@ The next board is responsible for controlling the wireless connection between th
 * Schottky diode 10A07
 * Resistors 10K
 
-# How does this watch go home?
+# How is this watch read?
 The count is based on the Fibonacci sequence as the first five sentences of this sequence are used to represent sentences from 1 to 12, using LEDs and color schemes as follows:
 - Required Sequence {1,1,2,3,5}
 - Total Color {Black,Red,Green,Blue}
