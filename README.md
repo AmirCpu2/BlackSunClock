@@ -20,15 +20,17 @@ This board can execute the following commands via serial:
 >6. y ## - set Year [range 0..99]
 >7. w ## - arbitrary day of the week [range 1..7]
 >8. t - Get Status All LED => 00000
->9. g (LEDGet) # - get Color LED [range 1,2,3,4,5]
->10. b (LEDSet) ## - set Color LED [range LED 1,2 / * - 1.2 - * /, 3 / * - 2 - * /, 4 / * - 3 - * /, 5] [range color 0,1,2,3]
->11. l - Set Game Mode Status [range 0, 1]
+>9. g # (LEDGet) - get Color LED [range 1,2,3,4,5]
+>10. b ## (LEDSet) - set Color LED [range LED 1,2 / * - 1.2 - * /, 3 / * - 2 - * /, 4 / * - 3 - * /, 5] [range color 0,1,2,3]
+>11. l # - Set Game Mode Status [range 0, 1]
 >12. r - Print Led Status
->13. a - set AM p - set PM
->14. z - start clock Z - stop clock
->15. q - SQW / OUT = 1Hz Q - stop SQW / OUT
->16. \> ##, ### - write to register ## the value ###
->17. < ## - read the value in register ##
+>13. a - set AM 
+>14. p - set PM
+>15. z - start clock 
+>16. Z - stop clock
+>17. q - SQW / OUT = 1Hz Q - stop SQW / OUT
+>18. \> ##, ### - write to register ## the value ###
+>19. < ## - read the value in register ##
 
 ******You can put # the above quotes instead.******
 
