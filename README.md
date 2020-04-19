@@ -6,8 +6,8 @@ This is not an ordinary handheld or digital clock based on the usual clock count
 3. The programming and design part of Algorithm is a clock designed by me and loaded into this data repository.
 
 # Section 1:
-Photos of the body:
-
+Photos of the body:<br/>
+<img width="400px" src="http://silkrood.ir/b2.png" />
 
 # Section 2:
 There are two main boards in this clock, the first for clock control and the instructions for clock control and control of the main LEDs of the clock.
