@@ -1,7 +1,7 @@
 # Black Sun Clock
 This is not a digital clock with a normal count , it represents an hour in beautiful colors with a unique algorithm.
 # What are the parts of this watch and who made it?
-1. The body of this watch, designed and implemented by team designer, peyman.
+1. The body of this watch, designed and implemented by team designer, Mr.peyman.
 2. The electronic part of this watch made by myself and its details will be mentioned.
 3. The programming and design part of Algorithm is a clock designed by me and loaded into this data repository.
 
