@@ -429,7 +429,7 @@ void clk(int mt , int ht )
  * timeSetValueDs1307 Start
  ************************************/
   
-//RealTimeClock RTC;//=new RealTimeClock();
+RealTimeClock RTC = new RealTimeClock();
 
 #define Display_Clock_Every_N_Seconds 10           // n.secs to show date/time
 #define Display_ShortHelp_Every_N_Seconds 60       // n.secs to show hint for help
