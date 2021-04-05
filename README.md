@@ -7,7 +7,7 @@ This is not a digital clock with a normal count , it represents an hour in beaut
 
 # Section 1:
 Photos of the body:<br/>
-<img width="400px" src="http://silkrood.ir/b2.png" />
+<img width="400px" src="https://raw.githubusercontent.com/AmirCpu2/BlackSunClock/ed3246eae8bb40ddc21ec27ba59e6c7f36b6eee7/web%20BlackSun%20Clock/clock.svg" />
 
 # Section 2:
 There are two main boards in this clock, the first for clock control and the instructions for clock control and control of the main LEDs of the clock.
